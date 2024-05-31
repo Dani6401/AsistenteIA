@@ -77,7 +77,6 @@ def get_weather(city):
 
 # Lista de chistes
 jokes = [
-    "¿Por qué los pájaros no usan Facebook? Porque ya tienen Twitter.",
     "¿Cómo se dice pañuelo en japonés? Saka-moko.",
     "¿Qué hace una abeja en el gimnasio? ¡Zum-ba!",
     "¿Qué le dice una iguana a su hermana gemela? Somos iguanitas.",
@@ -114,43 +113,52 @@ def run(rec):
     elif 'hora' in rec:
         hora = datetime.datetime.now().strftime('%I:%M %p')
         talk("Son las " + hora)
-    elif 'busca' in rec:
-        order = rec.replace('busca', '')
-        wikipedia.set_lang("es")
-        info = wikipedia.summary(order, 1)
-        talk(info)
-    elif 'google' in rec:
-        search = rec.replace('google', '')
+
+
+    elif 'investiga en wikipedia' in rec:
+        talk('¿Qué quieres buscar en Wikipedia?')
+        try:
+            with sr.Microphone() as source:
+                print("Escuchando...")
+                voice = listener.listen(source)
+                search_query = listener.recognize_google(voice, language='es-ES').lower()
+            results = wikipedia.summary(search_query, sentences=1)
+            talk(f"De acuerdo con Wikipedia, {results}")
+            talk("Para tu comodidad, mostraré en pantalla los resultados.")
+            webbrowser.open(f"https://es.wikipedia.org/wiki/{search_query.replace(' ', '_')}")
+        except Exception as e:
+            talk(f'Hubo un error al buscar en Wikipedia: {str(e)}')
+
+
+    elif 'busca en google' in rec:
+        search = rec.replace('busca en google', '')
         talk('Buscando en Google: ' + search)
         webbrowser.open(f"https://www.google.com/search?q={search}")
+
+
     elif 'whatsapp' in rec:
         try:
-            talk('¿A quién quieres enviar el mensaje?')
-            with sr.Microphone() as source:
-                voice = listener.listen(source)
-                contact = listener.recognize_google(voice, language='es-ES').lower()
-
             talk('¿Qué mensaje quieres enviar?')
             with sr.Microphone() as source:
                 voice = listener.listen(source)
                 message = listener.recognize_google(voice, language='es-ES').lower()
             
-            # Aquí deberías tener un diccionario de contactos o una manera de obtener el número de teléfono
-            contacts = {
-                'Tocayo': '+50242001459',
-                'Oscar Uni':'+50254658360'
-            }
+            # Define directamente el número de teléfono al cual enviar el mensaje
+            phone_number = '+50254244630'  # Cambia este número por el número al que deseas enviar el mensaje
+            hour = datetime.datetime.now().hour
+            minute = datetime.datetime.now().minute + 1  # Enviará el mensaje 1 minuto después de la hora actual
             
-            if contact in contacts:
-                phone_number = contacts[contact]
-                hour = datetime.datetime.now().hour
-                minute = datetime.datetime.now().minute + 1  # Enviará el mensaje 1 minutos después de la hora actual
-                pywhatkit.sendwhatmsg(phone_number, message, hour, minute)
-                talk(f'Enviando mensaje a {contact}')
-            else:
-                talk(f'No tengo el número de {contact}')
+            if minute >= 60:
+                minute -= 60
+                hour += 1
+
+            print(f'Enviando mensaje a {phone_number} a las {hour}:{minute}')
+            pywhatkit.sendwhatmsg(phone_number, message, hour, minute)
+            talk(f'Enviando mensaje a {phone_number}')
         except Exception as e:
             talk(f'Hubo un error al enviar el mensaje: {str(e)}')
+
+
     elif 'clima' in rec:
         talk('¿De qué ciudad quieres saber el clima?')
         try:
@@ -161,6 +169,8 @@ def run(rec):
             talk(weather_info)
         except Exception as e:
             talk(f'Hubo un error al obtener el clima: {str(e)}')
+
+            
     elif 'película' in rec:
         if 'disney' in rec:
             talk('Abriendo Disney+')
@@ -176,9 +186,13 @@ def run(rec):
             webbrowser.open("https://www.primevideo.com")
         else:
             talk('No reconozco esa plataforma de streaming.')
+
+
     elif 'chiste' in rec:
         joke = random.choice(jokes)
         talk(joke)
+
+
     elif 'correo' in rec:
         try:
             talk('¿A quién quieres enviar el correo?')
@@ -198,8 +212,8 @@ def run(rec):
             
             # Aquí deberías tener un diccionario de contactos o una manera de obtener el correo electrónico
             email_contacts = {
-                'Michi': 'sdelcida2@miumg.edu.gt',
-                'Mi': 'dsniel2046@gmail.com'
+                'a Michelle': 'sdelcida2@miumg.edu.gt',
+                'a Daniel': 'dsniel2046@gmail.com'
             }
             
             if to_email in email_contacts:
@@ -209,7 +223,9 @@ def run(rec):
                 talk(f'No tengo el correo electrónico de {to_email}')
         except Exception as e:
             talk(f'Hubo un error al enviar el correo: {str(e)}')
-    elif 'abrir' in rec:
+
+
+    elif 'abre' in rec:
         # Reemplaza las aplicaciones y directorios con los que deseas trabajar
         if 'calculadora' in rec:
             os.system("calc")
@@ -219,7 +235,9 @@ def run(rec):
             os.system("Opera")
         else:
             talk('No reconozco esa aplicación.')
-    elif 'buscar' in rec:
+
+
+    elif 'archivo' in rec:
         try:
             talk('¿Qué archivo estás buscando?')
             with sr.Microphone() as source:
@@ -234,11 +252,16 @@ def run(rec):
                     break
             else:
                 talk(f"No se encontró el archivo {filename}")
+
         except Exception as e:
             talk(f'Hubo un error al buscar el archivo: {str(e)}')
-    elif 'exit' in rec: 
+
+
+    elif 'adios' in rec: 
         flag = 0
         talk("Saliendo...")
+
+
     else:
         talk("Vuelve a intentarlo, no reconozco: " + rec)
     return flag
