@@ -18,8 +18,8 @@ name = 'elizabeth'
 weather_api_key = 'e382183c34a77f4839a11ea8c2f2f225'
 
 # Credenciales de Gmail
-email_user = 'djimenezh1@miumg.edu.gt'
-email_password = '2]!m{q6q(6'
+email_user = 'dpniel2046@gmail.com'
+email_password = 'wfst warp lrrj cthc'
 
 # Bandera para controlar el ciclo del programa
 flag = 1
@@ -54,6 +54,7 @@ def listen():
                 rec = rec.replace(name, '')
                 flag = run(rec)
             else:
+                talk(f"tiene que mencionar'{name}', para ejecutar alguna accion")
                 print(f"No se mencionó '{name}', no se ejecutará ninguna acción.")
     except:
         pass
@@ -144,7 +145,7 @@ def run(rec):
                 message = listener.recognize_google(voice, language='es-ES').lower()
             
             # Define directamente el número de teléfono al cual enviar el mensaje
-            phone_number = '+50254244630'  # Cambia este número por el número al que deseas enviar el mensaje
+            phone_number = '+50254244630'  
             hour = datetime.datetime.now().hour
             minute = datetime.datetime.now().minute + 1  # Enviará el mensaje 1 minuto después de la hora actual
             
@@ -212,8 +213,8 @@ def run(rec):
             
             # Aquí deberías tener un diccionario de contactos o una manera de obtener el correo electrónico
             email_contacts = {
-                'a Michelle': 'sdelcida2@miumg.edu.gt',
-                'a Daniel': 'dsniel2046@gmail.com'
+                'a michelle': 'sdelcida2@miumg.edu.gt',
+                'a daniel': 'dsniel2046@gmail.com'
             }
             
             if to_email in email_contacts:
@@ -226,18 +227,16 @@ def run(rec):
 
 
     elif 'abre' in rec:
-        # Reemplaza las aplicaciones y directorios con los que deseas trabajar
         if 'calculadora' in rec:
             os.system("calc")
-        elif 'editor de texto' in rec:
+        elif 'bloc de notas' in rec:
             os.system("bloc de notas")
         elif 'navegador' in rec:
             os.system("Opera")
         else:
             talk('No reconozco esa aplicación.')
 
-
-    elif 'archivo' in rec:
+    elif 'busca' in rec:
         try:
             talk('¿Qué archivo estás buscando?')
             with sr.Microphone() as source:
@@ -245,11 +244,15 @@ def run(rec):
                 filename = listener.recognize_google(voice, language='es-ES').lower()
             
             # Reemplaza la ruta del directorio con el directorio donde deseas buscar archivos
-            root_dir = "C:/Users/dsnie/Documents/TEST.txt"
+            root_dir = "C:/Users/dsnie/Escritorio/"
             for root, dirs, files in os.walk(root_dir):
-                if filename in files:
-                    talk(f"El archivo {filename} fue encontrado en {root}")
-                    break
+                for file in files:
+                    if filename in file:
+                        talk(f"El archivo {file} fue encontrado en {root}")
+                        break
+                else:
+                    continue
+                break
             else:
                 talk(f"No se encontró el archivo {filename}")
 
@@ -257,10 +260,11 @@ def run(rec):
             talk(f'Hubo un error al buscar el archivo: {str(e)}')
 
 
-    elif 'adios' in rec: 
-        flag = 0
-        talk("Saliendo...")
 
+    elif 'nos vemos' in rec: 
+        flag = 0
+        talk("Saliendo")
+        exit()
 
     else:
         talk("Vuelve a intentarlo, no reconozco: " + rec)
