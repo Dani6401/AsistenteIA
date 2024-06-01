@@ -111,6 +111,8 @@ def run(rec):
         music = rec.replace('reproduce', '')
         talk('Reproduciendo ' + music)
         pywhatkit.playonyt(music)
+    
+    
     elif 'hora' in rec:
         hora = datetime.datetime.now().strftime('%I:%M %p')
         talk("Son las " + hora)
@@ -209,7 +211,7 @@ def run(rec):
             talk('¿Qué mensaje quieres enviar?')
             with sr.Microphone() as source:
                 voice = listener.listen(source)
-                message = listener.recognize_google(voice, language='es-ES').lower()
+                message = listener.recognsize_google(voice, language='es-ES').lower()
             
             # Aquí deberías tener un diccionario de contactos o una manera de obtener el correo electrónico
             email_contacts = {
