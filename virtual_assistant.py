@@ -1,25 +1,25 @@
-import speech_recognition as sr  # Para convertir el audio en texto
-import pyttsx3  # Para la síntesis de voz 
-import pywhatkit  # Para buscar videos en YouTube y enviar mensajes de WhatsApp
+import speech_recognition as sr  
+import pyttsx3   
+import pywhatkit
 import datetime  # Para obtener la hora actual
 import wikipedia  # Para buscar información en Wikipedia
-import webbrowser  # Para realizar búsquedas en Google y abrir URLs
-import requests  # Para obtener información del clima
-import random  # Para seleccionar chistes aleatorios
-import smtplib  # Para enviar correos electrónicos
-import os  # Para abrir aplicaciones y buscar archivos en el ordenador
+import webbrowser  
+import requests  
+import random 
+import smtplib  
+import os  
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 # Nombre del asistente virtual
-name = 'elizabeth'
+name = 'ana'
 
 # Clave API de OpenWeatherMap 
 weather_api_key = 'e382183c34a77f4839a11ea8c2f2f225'
 
 # Credenciales de Gmail
-email_user = 'dpniel2046@gmail.com'
-email_password = 'wfst warp lrrj cthc'
+email_user = 'Tucorreoelectronico@gmail.com'
+email_password = 'tucontraseña'
 
 # Bandera para controlar el ciclo del programa
 flag = 1
@@ -215,8 +215,8 @@ def run(rec):
             
             # Aquí deberías tener un diccionario de contactos o una manera de obtener el correo electrónico
             email_contacts = {
-                'a michelle': 'sdelcida2@miumg.edu.gt',
-                'a daniel': 'dsniel2046@gmail.com'
+                'a michi': 'sdelcida2@miumg.edu.gt',
+                'a mi': 'dsniel2046@gmail.com'
             }
             
             if to_email in email_contacts:
